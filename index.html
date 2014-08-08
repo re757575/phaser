@@ -8,16 +8,70 @@
 <body>
 	<script type="text/javascript">
 		var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
-		function preload() {
 
+		function preload() {
+			game.load.image('fathers-day-rigth', 'assets/fathers-day2-rigth.png');
+			game.load.image('fathers-day-left', 'assets/fathers-day2-left.png');
+			game.load.image('sky', 'assets/sky.png');
 		}
 
+		var sky,fdSpriteR,fdSpriteL;
+		var cursors;
+
 		function create() {
-			
+			game.physics.startSystem(Phaser.Physics.ARCADE);
+			sky = game.add.sprite(0, 0, 'sky');
+
+			// 宣告遊戲物件
+			fdSpriteR = game.add.sprite(game.world.centerX, 100, 'fathers-day-rigth');
+			fdSpriteL = game.add.sprite(game.world.centerX, 100, 'fathers-day-left');
+
+			// 啟用物理引擎
+			game.physics.enable(fdSpriteR, Phaser.Physics.ARCADE);
+			game.physics.enable(fdSpriteL, Phaser.Physics.ARCADE);
+			// 加速度
+			fdSpriteR.body.acceleration.y = 100;
+			fdSpriteL.body.acceleration.y = 100;
+			// 邊界碰撞
+			fdSpriteR.body.collideWorldBounds = true;
+			fdSpriteL.body.collideWorldBounds = true;
+			// 阻力
+			fdSpriteR.body.drag.x = 50;
+			fdSpriteL.body.drag.x = 50;
+
+			fdSpriteR.anchor.setTo(.5, .5);
+			fdSpriteL.anchor.setTo(.5, .5);
+
+			fdSpriteR.visible = true;
+			fdSpriteL.visible = false;
+
+			cursors = game.input.keyboard.createCursorKeys();
 		}
 
 		function update() {
-			
+			if (cursors.left.isDown) {
+			    //  Move to the left
+			    fdSpriteR.body.velocity.x = -100;
+			    fdSpriteR.visible = false;
+			    fdSpriteL.body.velocity.x = -100;
+			    fdSpriteL.visible = true;
+			    //fdSpriteR.scale = -1;
+			} else if (cursors.right.isDown) {
+			    //  Move to the right
+			    fdSpriteR.body.velocity.x = 100;
+			    fdSpriteR.visible = true;
+			    fdSpriteL.body.velocity.x = 100;
+			    fdSpriteL.visible = false;
+			    //fdSpriteR.scale = 1;
+			} else if (cursors.up.isDown) {
+			    //  Move to the right
+			    fdSpriteR.body.velocity.y = -150;
+			    fdSpriteL.body.velocity.y = -150;
+			} else if (cursors.down.isDown) {
+			    //  Move to the right
+			    fdSpriteR.body.velocity.y = 150;
+			    fdSpriteL.body.velocity.y = 150;
+			}
 		}
 	</script>
 </body>
